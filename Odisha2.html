@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Explore Odisha 🌏</title>
+  <style>
+    * { box-sizing: border-box; }
+    body { font-family: Arial, sans-serif; margin:0; padding:20px; background:#eef2f5; text-align:center; }
+    h1 { color:#2c3e50; }
+    .gallery {display:flex; flex-wrap:wrap; justify-content:center; gap:15px; margin-top:20px;}
+    .place {width:200px; cursor:pointer; transition:transform .2s;}
+    .place img {width:100%; border-radius:8px; box-shadow:0 2px 8px rgba(0,0,0,.2);}
+    .place:hover {transform:scale(1.05);}
+    .overlay, .popup {display:none; position:fixed;}
+    .overlay {top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.6);z-index:900;}
+    .popup {top:50%;left:50%;width:90%;max-width:650px;padding:20px;background:#fff;border-radius:10px;box-shadow:0 5px 20px rgba(0,0,0,.3);transform:translate(-50%,-50%) scale(.9);opacity:0;animation:appear .3s forwards;z-index:1000;}
+    @keyframes appear {to {transform:translate(-50%,-50%) scale(1);opacity:1;}}
+    .popup img {width:100%; border-radius:8px; margin-bottom:15px;}
+    .close-btn {position:absolute; top:15px; right:20px; font-size:22px; color:#e74c3c; cursor:pointer;}
+    .popup-title {margin:0 0 10px; color:#34495e;}
+    .popup-desc {text-align:left; margin-bottom:8px;}
+    .popup-loc {font-size:14px; color:#777;}
+  </style>
+</head>
+<body>
+
+<h1>Must‑Visit Tourist Places in Odisha</h1>
+<div class="gallery">
+  <div class="place" onclick="showPopup(0)">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/fb/Jagannath_Temple%2C_Puri.jpg/800px-Jagannath_Temple%2C_Puri.jpg" alt="Puri">
+  </div>
+  <div class="place" onclick="showPopup(1)">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/7f/Konark_Sun_Temple_Front_View.jpg/800px-Konark_Sun_Temple_Front_View.jpg" alt="Konark">
+  </div>
+  <div class="place" onclick="showPopup(2)">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a3/Chilika_Lake.jpg/800px-Chilika_Lake.jpg" alt="Chilika">
+  </div>
+  <div class="place" onclick="showPopup(3)">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/34/Hirakud_Dam_Panoramic_View.jpg/800px-Hirakud_Dam_Panoramic_View.jpg" alt="Hirakud">
+  </div>
+  <div class="place" onclick="showPopup(4)">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e9/Barehipani_Falls_Simlipal.jpg/800px-Barehipani_Falls_Simlipal.jpg" alt="Simlipal">
+  </div>
+  <div class="place" onclick="showPopup(5)">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a3/Chilika_Lake.jpg/800px-Chilika_Lake.jpg" alt="Daringbadi">
+  </div>
+  <div class="place" onclick="showPopup(6)">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/78/Lingaraj_Temple.jpg/800px-Lingaraj_Temple.jpg" alt="Lingaraj">
+  </div>
+  <div class="place" onclick="showPopup(7)">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Udayagiri_Caves_Odisha.JPG/800px-Udayagiri_Caves_Odisha.JPG" alt="Caves">
+  </div>
+  <div class="place" onclick="showPopup(8)">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Satkosia.jpg/800px-Satkosia.jpg" alt="Satkosia">
+  </div>
+  <div class="place" onclick="showPopup(9)">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/8e/Taptapani.jpg/800px-Taptapani.jpg" alt="Taptapani">
+  </div>
+</div>
+
+<div class="overlay" id="overlay" onclick="hidePopup()"></div>
+<div class="popup" id="popup">
+  <span class="close-btn" onclick="hidePopup()">✖</span>
+  <img id="popup-img" alt="">
+  <h2 class="popup-title" id="popup-title"></h2>
+  <p class="popup-desc" id="popup-desc"></p>
+  <p class="popup-loc" id="popup-loc"></p>
+</div>
+
+<script>
+const places = [
+  {
+    title:"Puri Jagannath Temple",
+    img:"https://upload.wikimedia.org/wikipedia/commons/thumb/f/fb/Jagannath_Temple%2C_Puri.jpg/800px-Jagannath_Temple%2C_Puri.jpg",
+    desc:"A sacred Char Dham pilgrimage site dedicated to Lord Jagannath, the temple dates back to the 12th century and is famous for its annual Rath Yatra festival, drawing millions of devotees.",
+    loc:"📍 Puri, Odisha"
+  },
+  {
+    title:"Konark Sun Temple",
+    img:"https://upload.wikimedia.org/wikipedia/commons/thumb/7/7f/Konark_Sun_Temple_Front_View.jpg/800px-Konark_Sun_Temple_Front_View.jpg",
+    desc:"Built in the 13th century CE by King Narasimhadeva I, this UNESCO World Heritage Site is shaped like a colossal chariot with twelve pairs of wheels, and walls adorned with intricate carvings.",
+    loc:"📍 Konark, Odisha"
+  },
+  {
+    title:"Chilika Lake",
+    img:"https://upload.wikimedia.org/wikipedia/commons/thumb/a/a3/Chilika_Lake.jpg/800px-Chilika_Lake.jpg",
+    desc:"Asia’s largest brackish water lagoon, home to hundreds of migratory birds, Irrawaddy dolphins, and a vital wintering ground for birds from Siberia and Russia.",
+    loc:"📍 Puri/Ganjam districts"
+  },
+  {
+    title:"Hirakud Dam",
+    img:"https://upload.wikimedia.org/wikipedia/commons/thumb/3/34/Hirakud_Dam_Panoramic_View.jpg/800px-Hirakud_Dam_Panoramic_View.jpg",
+    desc:"One of the world’s longest earthen dams, built across the Mahanadi River after India’s independence. It offers wide scenic views and recreational boating.",
+    loc:"📍 Sambalpur, Odisha"
+  },
+  {
+    title:"Simlipal National Park",
+    img:"https://upload.wikimedia.org/wikipedia/commons/thumb/e/e9/Barehipani_Falls_Simlipal.jpg/800px-Barehipani_Falls_Simlipal.jpg",
+    desc:"A UNESCO‑declared biosphere reserve with tigers, elephants and ancient tribal culture. Famous for the majestic Barehipani waterfalls.",
+    loc:"📍 Mayurbhanj, Odisha"
+  },
+  {
+    title:"Daringbadi",
+    img:"https://upload.wikimedia.org/wikipedia/commons/thumb/a/a3/Chilika_Lake.jpg/800px-Chilika_Lake.jpg",
+    desc:"Known as the 'Kashmir of Odisha', Daringbadi is a cool hill station at 915 m. Named after British officer Daring Saheb, it’s famous for pine forests, waterfalls, tribal culture, and GI‑tagged turmeric.",
+    loc:"📍 Kandhamal district"
+  },
+  {
+    title:"Lingaraj Temple",
+    img:"https://upload.wikimedia.org/wikipedia/commons/thumb/7/78/Lingaraj_Temple.jpg/800px-Lingaraj_Temple.jpg",
+    desc:"Built in the 11th century AD by the Somavamsi kings, this majestic temple honors Shiva as Hari‑Hara. Standing 180 ft and built in Kalinga style, it's Bhubaneswar’s most iconic shrine.",
+    loc:"📍 Bhubaneswar, Odisha"
+  },
+  {
+    title:"Udayagiri & Khandagiri Caves",
+    img:"https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Udayagiri_Caves_Odisha.JPG/800px-Udayagiri_Caves_Odisha.JPG",
+    desc:"Ancient Jain rock‑cut caves dating to the 1st century BC, with carved verandahs, inscriptions, and sculptures — key heritage sites representing early religion and art.",
+    loc:"📍 Near Bhubaneswar"
+  },
+  {
+    title:"Satkosia Gorge",
+    img:"https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Satkosia.jpg/800px-Satkosia.jpg",
+    desc:"A stunning gorge carved by the Mahanadi River, rich in wildlife and famous for river safaris, dense forests, and scenic cliffs.",
+    loc:"📍 Angul/Deogarh border"
+  },
+  {
+    title:"Taptapani Hot Springs",
+    img:"https://upload.wikimedia.org/wikipedia/commons/thumb/8/8e/Taptapani.jpg/800px/Taptapani.jpg",
+    desc:"A natural sulphur hot spring in Ganjam district believed to have medicinal properties, set amidst lush forests — a soothing retreat.",
+    loc:"📍 Ganjam, Odisha"
+  }
+];
+
+function showPopup(i) {
+  const p = places[i];
+  document.getElementById("popup-img").src = p.img;
+  document.getElementById("popup-title").innerText = p.title;
+  document.getElementById("popup-desc").innerText = p.desc;
+  document.getElementById("popup-loc").innerText = p.loc;
+  document.getElementById("overlay").style.display = "block";
+  document.getElementById("popup").style.display = "block";
+}
+
+function hidePopup() {
+  document.getElementById("overlay").style.display = "none";
+  document.getElementById("popup").style.display = "none";
+}
+</script>
+
+</body>
+</html>
